@@ -16,13 +16,18 @@ enum GameStates {
   EndState,
 }
 
-export class GameManager {
+export class GameServer {
   public characters: Array<Character>;
   public characterMovement: CharacterMovement;
   public gridManager: GridManager;
 
   public mode: GameModes;
   public state: IStateController;
+
+  constructor(characters: Array<Character>, mode: GameModes) {
+    this.characters = characters;
+    this.mode = mode;
+  }
 
   public AddCharacters(): void {
     switch (this.mode) {
@@ -52,7 +57,7 @@ export class GameManager {
     this.state.Destroy();
     switch (newState) {
       case GameStates.StartState:
-        this.state = new StartController();
+        this.state = new StartController(this);
         break;
 
       case GameStates.BattleState:

@@ -15,9 +15,11 @@ export class GridManager {
       }
     }
   }
+
   public AddObstacles(x: number, y: number, obstacle: number): void {
     this.tiles[x][y].obtacles.push(obstacle);
   }
+
   public GenerateObstacles(): void {
     this.AddObstacles;
     this.AddObstacles(1, 5, 4);
