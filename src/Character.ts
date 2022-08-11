@@ -5,4 +5,7 @@ export class Character {
   currentPosition: Tile;
   isMummy: boolean;
   isBot: boolean;
+  GoToStartPosition(): void {
+    this.currentPosition = this.startPosition;
+  }
 }
