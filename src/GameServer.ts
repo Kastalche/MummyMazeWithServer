@@ -6,11 +6,11 @@ import { IStateController } from "./IStateController";
 import { StartController } from "./StartContoller";
 import { EndController } from "./EndController";
 
-enum GameModes {
+export enum GameModes {
   SinglePlayer,
   Multiplayer,
 }
-enum GameStates {
+export enum GameStates {
   StartState,
   BattleState,
   EndState,
