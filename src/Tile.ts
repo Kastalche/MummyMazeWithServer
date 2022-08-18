@@ -1,7 +1,7 @@
 export class Tile {
   x: number;
   y: number;
-  obtacles: Array<number>;
+  obstacles: Array<number>;
 
   constructor(x: number, y: number) {
     this.x = x;
