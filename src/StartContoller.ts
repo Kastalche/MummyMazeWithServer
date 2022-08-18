@@ -2,9 +2,9 @@ import { IStateController } from "./IStateController";
 import { GameServer } from "./GameServer";
 
 export class StartController implements IStateController {
-  public gameManager: GameManager;
+  public gameManager: GameServer;
 
-  constructor(gm: GameManager) {
+  constructor(gm: GameServer) {
     // gm=GameManager
   }
 
