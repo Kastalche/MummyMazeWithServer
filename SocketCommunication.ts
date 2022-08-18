@@ -1,4 +1,4 @@
-import { GameServer } from "./src/GameServer";
+import { GameServer, GameModes } from './src/GameServer';
 import { Character } from './src/Character';
 
 export class SocketCommunication {
@@ -10,7 +10,7 @@ export class SocketCommunication {
     const { Server } = require("socket.io");
     const io = new Server(server);
     //arrat ot players
-    const msurver = new GameServer(Array<Character>, "Multi");
+    const msurver = new GameServer( new Array<Character>, GameServer.GameModes.Multiplayer);
 
     app.get("/", (req, res) => {
       res.send("<h1>Hello world</h1>");
