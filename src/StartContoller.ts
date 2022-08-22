@@ -1,18 +1,22 @@
 import { IStateController } from "./IStateController";
-import { GameServer } from "./GameServer";
+import { GameServer, GameStates } from "./GameServer";
 
 export class StartController implements IStateController {
-  public gameManager: GameServer;
+  public server: GameServer;
 
-  constructor(gm: GameServer) {
-    // gm=GameManager
+  constructor(server: GameServer) {
+    this.server = server;
   }
 
-  Start(): void {}
+  Start(): void {
+    this.CharactersToStartPosition();
+    this.server.Transition(GameStates.BattleState);
+  }
+
   Destroy(): void {}
 
   CharactersToStartPosition(): void {
-    this.gameManager.characters.forEach((character) => {
+    this.server.characters.forEach((character) => {
       character.GoToStartPosition();
     });
   }
