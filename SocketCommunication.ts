@@ -1,30 +1,52 @@
-import { GameServer, GameModes } from './src/GameServer';
-import { Character } from './src/Character';
+import { GameServer, GameModes, GameStates } from "./src/GameServer";
+import { Character } from "./src/Character";
+
+const express = require("express");
+const http = require("http");
+const { Server } = require("socket.io");
+
+const app = express();
+const server = http.createServer(app);
+const io = new Server(server);
 
 export class SocketCommunication {
+  players: Character[] = new Array();
+  game: GameServer;
+
   constructor() {
-    const express = require("express");
-    const app = express();
-    const http = require("http");
-    const server = http.createServer(app);
-    const { Server } = require("socket.io");
-    const io = new Server(server);
-    //arrat ot players
-    const msurver = new GameServer( new Array<Character>, GameServer.GameModes.Multiplayer);
+    this.listen();
+  }
+
+  private listen(): void {
+    server.listen(3000, () => {
+      console.log("listening on *:3000");
+    });
 
     app.get("/", (req, res) => {
-      res.send("<h1>Hello world</h1>");
+      res.send("<h1>Welcome to Mummy Maze!</h1>");
     });
 
     io.on("connection", (socket) => {
       console.log("a user connected");
-    });
 
-    server.listen(3000, () => {
-      console.log("listening on *:3000");
+      socket.on("start game", () => {
+        console.log("The game is starting");
+        this.game.Transition(GameStates.StartState);
+      });
     });
   }
+
+  public broadcast(command: string): void {
+    io.sockets.emit(command);
+  }
+
+  public sendToClient(socket, command: string): void {
+    socket.emit(command);
+  }
 }
+//arrat ot players
+// const msurver = new GameServer( new Array<Character>, GameServer.GameModes.Multiplayer);
+
 // public methods- send msg, broadcast, subscibe,unsubscribe.
 //nqkyde new mummy maze server(sebe si)
 //server referance kym tova
