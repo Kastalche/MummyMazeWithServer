@@ -1,5 +1,5 @@
 import { GameServer, GameModes, GameStates } from "./src/GameServer";
-import { Character } from "./src/Character";
+import { Character } from "./src/Entities/Character";
 
 const express = require("express");
 const http = require("http");
@@ -36,14 +36,19 @@ export class SocketCommunication {
     });
   }
 
-  public broadcast(command: string): void {
-    io.sockets.emit(command);
+  public broadcast(command: string, data?: any): void {
+    io.sockets.emit(command, data);
   }
 
   public sendToClient(socket, command: string): void {
     socket.emit(command);
   }
+
+  public sendDataToClient(socket, command: string, data?: any): void {
+    socket.emit(command, data);
+  }
 }
+
 //arrat ot players
 // const msurver = new GameServer( new Array<Character>, GameServer.GameModes.Multiplayer);
 

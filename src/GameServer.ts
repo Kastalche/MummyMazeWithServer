@@ -1,10 +1,11 @@
-import { BattleController } from "./BattleContoller";
-import { Character } from "./Character";
-import { CharacterMovement } from "./CharacterMovement";
-import { GridManager } from "./GridManager";
-import { IStateController } from "./IStateController";
-import { StartController } from "./StartContoller";
-import { EndController } from "./EndController";
+import { BattleController } from "./States/BattleContoller";
+import { Character } from "./Entities/Character";
+import { CharacterMovement } from "./Entities/CharacterMovement";
+import { GridManager } from "./Entities/GridManager";
+import { IStateController } from "./States/IStateController";
+import { StartController } from "./States/StartContoller";
+import { EndController } from "./States/EndController";
+import { SocketCommunication } from "../SocketCommunication";
 
 export enum GameModes {
   SinglePlayer,
@@ -17,40 +18,18 @@ export enum GameStates {
 }
 
 export class GameServer {
-  public characters: Array<Character>;
-  public characterMovement: CharacterMovement;
-  public gridManager: GridManager;
+  public socketCommunication: SocketCommunication;
 
   public mode: GameModes;
   public state: IStateController;
 
+  public characters: Array<Character>;
+  public characterMovement: CharacterMovement;
+  public gridManager: GridManager;
+
   constructor(characters: Array<Character>, mode: GameModes) {
     this.characters = characters;
     this.mode = mode;
-  }
-
-  public AddCharacters(): void {
-    switch (this.mode) {
-      case GameModes.SinglePlayer:
-        this.characters.push(
-          new Character(this.gridManager.tiles[3][5], true, true)
-        );
-
-        this.characters.push(
-          new Character(this.gridManager.tiles[1][2], false, false)
-        );
-        break;
-      case GameModes.Multiplayer:
-        this.characters.push(
-          new Character(this.gridManager.tiles[3][5], true, true)
-        );
-        this.characters.push(
-          new Character(this.gridManager.tiles[1][2], false, false)
-        );
-        this.characters.push(
-          new Character(this.gridManager.tiles[1][4], false, false)
-        );
-    }
   }
 
   public Transition(newState: GameStates): void {
