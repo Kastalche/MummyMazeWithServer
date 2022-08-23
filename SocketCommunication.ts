@@ -29,6 +29,9 @@ export class SocketCommunication {
     io.on("connection", (socket) => {
       console.log("a user connected");
 
+      this.game = new GameServer(this.players, 1);
+      this.players = [];
+
       socket.on("start game", () => {
         console.log("The game is starting");
         this.game.Transition(GameStates.StartState);
