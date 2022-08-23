@@ -1,13 +1,14 @@
 import { Tile } from "./Tile";
 import { Character } from "./Character";
-import { GameModes, GameServer } from "./GameServer";
 import { GridManager } from "./GridManager";
 import { Socket } from "dgram";
+import { GameModes, GameServer } from "../GameServer";
+
 export class CharacterMovement {
   gameserver: GameServer;
   gridManager: GridManager;
 
-  GenerateBotMove(bot: Character): void {
+  public GenerateBotMove(bot: Character): void {
     if (bot.isMummy) {
       if (this.BotNotOnTargetX(bot)) {
         this.BotMoveHorizontally(bot);
@@ -29,16 +30,16 @@ export class CharacterMovement {
     }
   }
 
-  GeneratePlayerMove(player: Character) {
+  public GeneratePlayerMove(player: Character) {
     //sent data to the server for your move (when figure out how to do it)
   }
 
-  IsAvailableFrom(targetTile: Tile, yourTile: Tile): boolean {
+  public IsAvailableFrom(targetTile: Tile, yourTile: Tile): boolean {
     if (targetTile.obstacles.length != 0) {
       if (targetTile.x != yourTile.x) {
         //if your x is diffrent
         if (targetTile.x - yourTile.x == -1) {
-          // u go left =>right
+          // u go left => right
           if (targetTile.obstacles.includes(3)) return false;
           else return true;
         } else if (targetTile.x - yourTile.x == 1) {
@@ -65,7 +66,7 @@ export class CharacterMovement {
     return true;
   }
 
-  CompareExplores(mummy: Character): Character {
+  public CompareExplores(mummy: Character): Character {
     switch (this.gameserver.mode) {
       case GameModes.SinglePlayer:
         return this.gameserver.characters[1];
@@ -88,18 +89,18 @@ export class CharacterMovement {
     }
   }
 
-  FindExplorerTile(mummy: Character): Tile {
+  public FindExplorerTile(mummy: Character): Tile {
     var targetPlayer = this.CompareExplores(mummy);
     var target = targetPlayer.currentPosition;
     return this.gridManager.tiles[target.x][target.y];
     //if this row works I will buy myself a balkanche
   }
 
-  GoTo(character: Character, tile: Tile): void {
+  public GoTo(character: Character, tile: Tile): void {
     character.currentPosition = tile;
   }
 
-  BotMoveHorizontally(bot: Character) {
+  private BotMoveHorizontally(bot: Character) {
     var botPos = bot.currentPosition;
     if (bot.isMummy) {
       var targetPos = this.FindExplorerTile(bot);
@@ -130,7 +131,7 @@ export class CharacterMovement {
     }
   }
 
-  BotMoveVertically(bot: Character) {
+  private BotMoveVertically(bot: Character) {
     var botPos = bot.currentPosition;
     if (bot.isMummy) {
       var targetPos = this.FindExplorerTile(bot);
@@ -161,7 +162,7 @@ export class CharacterMovement {
     }
   }
 
-  BotNotOnTargetX(bot: Character): boolean {
+  private BotNotOnTargetX(bot: Character): boolean {
     var botPos = bot.currentPosition;
     if (bot.isMummy) {
       var targetPos = this.FindExplorerTile(bot);
@@ -172,7 +173,7 @@ export class CharacterMovement {
     else return false;
   }
 
-  BotNotOnTargetY(bot: Character): boolean {
+  private BotNotOnTargetY(bot: Character): boolean {
     var botPos = bot.currentPosition;
     if (bot.isMummy) {
       var targetPos = this.FindExplorerTile(bot);
