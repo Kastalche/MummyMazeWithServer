@@ -6,50 +6,58 @@ import { IStateController } from "./States/IStateController";
 import { StartController } from "./States/StartContoller";
 import { EndController } from "./States/EndController";
 import { SocketCommunication } from "../SocketCommunication";
+import { Socket } from "dgram";
 
 export enum GameModes {
-  SinglePlayer,
-  Multiplayer,
+    SinglePlayer,
+    Multiplayer,
 }
 export enum GameStates {
-  StartState,
-  BattleState,
-  EndState,
+    StartState,
+    BattleState,
+    EndState,
 }
 
 export class GameServer {
-  public socketCommunication: SocketCommunication;
+    public socketCommunication: SocketCommunication;
 
-  public mode: GameModes;
-  public state: IStateController;
+    public mode: GameModes;
+    public state: IStateController;
 
-  public characters: Array<Character>;
-  public characterMovement: CharacterMovement;
-  public gridManager: GridManager;
+    public characters: Array<Character>;
+    public characterMovement: CharacterMovement;
+    public gridManager: GridManager;
 
-  constructor(characters: Array<Character>, mode: GameModes) {
-    this.characters = characters;
-    this.mode = mode;
-  }
-
-  public Transition(newState: GameStates): void {
-    this.state.Destroy();
-    switch (newState) {
-      case GameStates.StartState:
-        this.state = new StartController(this);
-        break;
-
-      case GameStates.BattleState:
-        this.state = new BattleController();
-        break;
-
-      case GameStates.EndState:
-        this.state = new EndController();
-        break;
-
-      default:
-        break;
+    constructor(
+        characters: Array<Character>,
+        mode: GameModes,
+        socket: SocketCommunication
+    ) {
+        this.characters = characters;
+        this.mode = mode;
+        this.socketCommunication = socket;
     }
-    this.state.Start();
-  }
+
+    public Transition(newState: GameStates): void {
+        this.state.Destroy();
+
+        switch (newState) {
+            case GameStates.StartState:
+                this.state = new StartController(this);
+                break;
+
+            case GameStates.BattleState:
+                this.state = new BattleController(this);
+                break;
+
+            case GameStates.EndState:
+                this.state = new EndController(this);
+                break;
+
+            default:
+                break;
+        }
+
+        this.state.Start();
+    }
 }
