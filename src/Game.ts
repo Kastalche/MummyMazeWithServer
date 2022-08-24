@@ -4,26 +4,24 @@ import { Player } from "./Player";
 import { CharacterMovement } from "./Entities/CharacterMovement";
 import { GridManager } from "./Entities/GridManager";
 export class Game {
-    curentMode: GameModes;
-    players: Array<Player>;
-    currentCharacter: Character;
-
     private server: GameServer;
-    public mode: GameModes;
+    private players: Array<Player>;
     public characters: Array<Character>;
 
-    public characterMovement: CharacterMovement;
+    public curentMode: GameModes;
+    public currentCharacter: Character;
+
     public gridManager: GridManager;
 
     constructor() {}
 
     public CharactersToStartPosition(): void {
-        this.server.characters.forEach((character) => {
+        this.characters.forEach((character) => {
             character.GoToStartPosition();
         });
     }
 
-    private AddCharacters(): void {
+    public AddCharacters(): void {
         switch (this.mode) {
             case GameModes.SinglePlayer:
                 this.characters.push(
@@ -46,4 +44,8 @@ export class Game {
                 );
         }
     }
+
+    public NextCurrentCharacter() {}
+
+    //TODO: ADD is available from because its not used only for bots.
 }
