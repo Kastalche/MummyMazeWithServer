@@ -1,7 +1,10 @@
 import { IStateController } from "./IStateController";
 import { GameServer } from "../GameServer";
+import { SocketCommunication } from "../../SocketCommunication";
+import { Character } from "../Entities/Character";
 export class EndController implements IStateController {
     private server: GameServer;
+    private socket: SocketCommunication;
 
     constructor(server: GameServer) {
         this.server = server;
@@ -9,8 +12,9 @@ export class EndController implements IStateController {
 
     Start(): void {
         //calculate game end(winner ect)
-        //socket.broadcast(game end data)
-        //socket.EndGame
+        this.socket.broadcast("endGame", { winner: Character });
+
+        //this.socket.EndGame()
     }
 
     Destroy(): void {}
