@@ -7,6 +7,8 @@ import { StartController } from "./States/StartContoller";
 import { EndController } from "./States/EndController";
 import { SocketCommunication } from "../SocketCommunication";
 import { Socket } from "dgram";
+import { Game } from "./Game";
+import { Player } from "./Player";
 
 export enum GameModes {
     SinglePlayer,
@@ -19,23 +21,22 @@ export enum GameStates {
 }
 
 export class GameServer {
+    Start() {
+        throw new Error("Method not implemented.");
+    }
     public socketCommunication: SocketCommunication;
-
-    public mode: GameModes;
+    public gamedate: Game;
+    public players: Array<Player>;
     public state: IStateController;
 
-    public characters: Array<Character>;
-    public characterMovement: CharacterMovement;
-    public gridManager: GridManager;
-
     constructor(
-        characters: Array<Character>,
-        mode: GameModes,
-        socket: SocketCommunication
+        players: Array<Player>,
+        socket: SocketCommunication,
+        gamedata: Game
     ) {
-        this.characters = characters;
-        this.mode = mode;
+        this.players = players;
         this.socketCommunication = socket;
+        this.gamedate = gamedata;
     }
 
     public Transition(newState: GameStates): void {
