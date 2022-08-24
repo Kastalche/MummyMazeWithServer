@@ -1,41 +1,49 @@
 import { GameServer, GameModes, GameStates } from "./src/GameServer";
 import { Character } from "./src/Entities/Character";
 import { Player } from "./src/Player";
-// TODO: move consts into classs and add public/private
-const express = require("express");
-const http = require("http");
-const { Server } = require("socket.io");
-
-const app = express();
-const server = http.createServer(app);
-const io = new Server(server);
-
+import express from "express";
+import { Game } from "./src/Game";
 export class SocketCommunication {
-    characters: Character[] = new Array();
-    players: Player[] = new Array();
+    private players: Player[] = new Array();
+    private game: GameServer = null;
+    private gameData: Game;
 
-    game: GameServer;
+    private app;
+    private server;
+    private io;
 
     constructor() {
+        this.app = express();
+        this.server = require("http").createServer(this.app);
+        this.io = require("socket.io")(this.server);
         this.listen();
     }
 
     private listen(): void {
-        server.listen(3000, () => {
+        this.server.listen(3000, () => {
             console.log("listening on *:3000");
         });
 
-        app.get("/", (req, res) => {
+        this.app.get("/", (req, res) => {
             res.send("<h1>Welcome to Mummy Maze!</h1>");
         });
 
-        io.on("connection", (socket) => {
-            console.log("a user connected");
-            //lengt 2, game==null
-            this.game = new GameServer(this.characters, 1, this);
-            this.players = [];
+        this.io.on("connection", (socket) => {
+            if (socket.connected) {
+                console.log("a user connected");
+                this.players.push(new Player(socket, character));
+            }
 
             socket.on("startGame", () => {
+                if (this.players.length == 2) {
+                    this.game = new GameServer(
+                        this.players,
+                        this,
+                        this.gameData
+                    );
+                    this.players = [];
+                }
+
                 console.log("The game is starting");
                 this.game.Transition(GameStates.StartState);
             });
@@ -43,14 +51,14 @@ export class SocketCommunication {
     }
 
     public broadcast(eventName: string, data?: any): void {
-        io.sockets.emit(command, data);
+        this.io.sockets.emit(eventName, data);
     }
 
-    public sendToClient(socket, command: string): void {
+    public sendToClient(socket, eventName: string): void {
         socket.emit(command);
     }
 
-    public sendDataToClient(socket, command: string, data?: any): void {
+    public sendDataToClient(socket, eventName: string, data?: any): void {
         socket.emit(command, data);
     }
 }
@@ -59,10 +67,4 @@ export class SocketCommunication {
 //TODO: event for mode
 //TODO: class Player for players not characters(socket.id can be used)
 //arrat ot players
-// const msurver = new GameServer( new Array<Character>, GameServer.GameModes.Multiplayer);
-
 // public methods- send msg, broadcast, subscibe,unsubscribe.
-//nqkyde new mummy maze server(sebe si)
-//server referance kym tova
-// ode na server com
-//testvai dvete nestha i servera
