@@ -5,8 +5,9 @@ export class Player {
     public socket;
     public character: Character;
 
-    constructor(socket, character: Character) {
+    constructor(socket, character: Character, id: number) {
         this.socket = socket;
         this.character = character;
+        this.id = id;
     }
 }
