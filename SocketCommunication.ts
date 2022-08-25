@@ -5,13 +5,14 @@ import express from "express";
 import { Game } from "./src/Game";
 export class SocketCommunication {
     private players: Player[] = new Array();
-    private game: GameServer = null;
+    private GameServer: GameServer = null;
     private gameData: Game;
 
     private app;
     private server;
     private io;
 
+    //I think i made this class too big and messy ;( help!!! i need somebody)
     constructor() {
         this.app = express();
         this.server = require("http").createServer(this.app);
@@ -31,21 +32,25 @@ export class SocketCommunication {
         this.io.on("connection", (socket) => {
             if (socket.connected) {
                 console.log("a user connected");
-                this.players.push(new Player(socket, character));
-            }
-
+                //TODO: a user chosses mode and character()
+                //io.on(singleplear, {eventa})
+                
+                this.io.on("single player", ()=> {
+                    io.start(new GameServer(new Array<players> this.players.push( new player id=socket.id,...., new this.gameData { current mode= singleplayer players = this player adn so}),
+                })
             socket.on("startGame", () => {
                 if (this.players.length == 2) {
-                    this.game = new GameServer(
+                    this.GameServer = new GameServer(
                         this.players,
                         this,
                         this.gameData
                     );
                     this.players = [];
                 }
+                
 
                 console.log("The game is starting");
-                this.game.Transition(GameStates.StartState);
+                this.GameServer.Transition(GameStates.StartState);
             });
         });
     }
@@ -55,16 +60,47 @@ export class SocketCommunication {
     }
 
     public sendToClient(socket, eventName: string): void {
-        socket.emit(command);
+        socket.emit(eventName);
     }
 
     public sendDataToClient(socket, eventName: string, data?: any): void {
-        socket.emit(command, data);
+        socket.emit(eventName, data);
+    }
+
+    public Subscribe(socket,eventName: string, callback:Function, contex:any )
+    {
+        socket.on(eventName, () => {
+            callback.call(contex)
+        })
+    }
+
+    public Unsubscribe(socket,eventName: string, callback:Function, contex:any )
+    {
+        socket.of(eventName, () => {
+            callback.call(contex)
+        });
     }
 }
 //TODO:  merhod adter creating new gam ->StartGame
 //TODO: Subscribe/Unsubscribe
 //TODO: event for mode
 //TODO: class Player for players not characters(socket.id can be used)
-//arrat ot players
 // public methods- send msg, broadcast, subscibe,unsubscribe.
+
+// if (this.gameData.curentMode == GameModes.SinglePlayer)
+// {this.players.push(
+//     new Player(
+//         socket,
+//         this.gameData.CreateCharacterForPlayer(false),
+//         socket.id
+//     )
+// );}
+
+// else if (this.gameData.curentMode == GameModes.Multiplayer)
+// {
+//     this.players.push(
+//         new Player(
+//             socket,
+//             //this.gameData.CreateCharacterForPlayer(aPlayersChosenCharacter:Boolean);
+//             socket.id
+// }

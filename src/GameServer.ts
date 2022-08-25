@@ -21,9 +21,6 @@ export enum GameStates {
 }
 
 export class GameServer {
-    Start() {
-        throw new Error("Method not implemented.");
-    }
     public socketCommunication: SocketCommunication;
     public gamedate: Game;
     public players: Array<Player>;
@@ -60,5 +57,22 @@ export class GameServer {
         }
 
         this.state.Start();
+    }
+
+    public BroadcastMessage(message: string, data?: any): void {
+        this.socketCommunication.broadcast(message, data);
+    }
+
+    public SendMessage(socket, message: string, data?: any) {
+        this.socketCommunication.sendDataToClient(socket, message, data);
+    }
+
+    public Subscribe(eventName: string, event: void) {
+        this.socketCommunication.Subscribe(
+            null,
+            "quit",
+            this.state.Start,
+            this.state
+        );
     }
 }
