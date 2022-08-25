@@ -31,50 +31,18 @@ export class BotLogic {
         }
     }
 
-    public IsAvailableFrom(targetTile: Tile, yourTile: Tile): boolean {
-        if (targetTile.obstacles.length != 0) {
-            if (targetTile.x != yourTile.x) {
-                //if your x is diffrent
-                if (targetTile.x - yourTile.x == -1) {
-                    // u go left => right
-                    if (targetTile.obstacles.includes(3)) return false;
-                    else return true;
-                } else if (targetTile.x - yourTile.x == 1) {
-                    // righ => left
-                    if (targetTile.obstacles.includes(1)) return false;
-                    else return true;
-                }
-            }
-
-            if (targetTile.y != yourTile.y) {
-                if (targetTile.y - yourTile.y == 1) {
-                    if (targetTile.obstacles.includes(4))
-                        // up => down
-                        return false;
-                    else return true;
-                } else if (targetTile.y - yourTile.y == -1) {
-                    if (targetTile.obstacles.includes(2))
-                        //down => up
-                        return false;
-                    else return true;
-                }
-            }
-        }
-        return true;
-    }
-
     public GoTo(character: Character, tile: Tile): void {
         character.currentPosition = tile;
     }
 
     public CompareExplores(mummy: Character): Character {
-        switch (this.gameserver.mode) {
+        switch (this.gamedata.curentMode) {
             case GameModes.SinglePlayer:
-                return this.gameserver.characters[1];
+                return this.gamedata.characters[1];
 
             case GameModes.Multiplayer:
-                var player1 = this.gameserver.characters[1];
-                var player2 = this.gameserver.characters[2];
+                var player1 = this.gamedata.characters[1];
+                var player2 = this.gamedata.characters[2];
 
                 if (
                     Math.abs(
@@ -90,7 +58,7 @@ export class BotLogic {
                 else return player1;
 
             default:
-                return this.gameserver.characters[1];
+                return this.gamedata.characters[1];
         }
     }
 
@@ -112,7 +80,7 @@ export class BotLogic {
         if (botPos.x < targetPos.x) {
             //right
             if (
-                this.IsAvailableFrom(
+                this.gamedata.IsAvailableFrom(
                     this.gridManager.tiles[botPos.x + 1][botPos.y],
                     this.gridManager.tiles[botPos.x][botPos.y]
                 )
@@ -122,7 +90,7 @@ export class BotLogic {
         } //left
         else {
             if (
-                this.IsAvailableFrom(
+                this.gamedata.IsAvailableFrom(
                     this.gridManager.tiles[botPos.x - 1][botPos.y],
                     this.gridManager.tiles[botPos.x][botPos.y]
                 )
@@ -143,7 +111,7 @@ export class BotLogic {
         if (botPos.y < targetPos.y) {
             //right
             if (
-                this.IsAvailableFrom(
+                this.gamedata.IsAvailableFrom(
                     this.gridManager.tiles[botPos.x][botPos.y + 1],
                     this.gridManager.tiles[botPos.x][botPos.y]
                 )
@@ -153,7 +121,7 @@ export class BotLogic {
         } //left
         else {
             if (
-                this.IsAvailableFrom(
+                this.gamedata.IsAvailableFrom(
                     this.gridManager.tiles[botPos.x][botPos.y - 1],
                     this.gridManager.tiles[botPos.x][botPos.y]
                 )
