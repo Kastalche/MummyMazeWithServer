@@ -32,14 +32,17 @@ export class Game {
         switch (this.curentMode) {
             case GameModes.SinglePlayer:
                 this.characters.push(
-                    new Character(this.gridManager.tiles[3][5], true, true)
+                    new Character(this.gridManager.tiles[1][2], false, false) //explorer
+                );
+                this.characters.push(
+                    new Character(this.gridManager.tiles[3][5], true, true) //mummy
                 );
 
-                this.characters.push(
-                    new Character(this.gridManager.tiles[1][2], false, false)
-                );
+                this.players[0].character = this.characters[0];
                 break;
+
             case GameModes.Multiplayer:
+                //here we will call characterForPlayers :D
                 this.characters.push(
                     new Character(this.gridManager.tiles[3][5], true, true)
                 );
