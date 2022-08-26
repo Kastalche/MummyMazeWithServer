@@ -10,7 +10,7 @@ export class Player {
         this.id = id;
     }
 
-    public AddCharacterToPlayer(character: Character) {
-        this.character = character;
-    }
+    // public AddCharacterToPlayer(character: Character) {
+    //     this.character = character;
+    // }
 }

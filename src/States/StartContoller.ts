@@ -14,10 +14,11 @@ export class StartController implements IStateController {
     }
 
     public Start(): void {
+        //everything except players and mode should be assined here by methods from game ;)
         this.game.AddCharacters();
         this.game.CharactersToStartPosition();
 
-        this.server.BroadcastMessage("StartBattle");
+        this.server.BroadcastMessage("BattleState");
         this.server.Transition(GameStates.BattleState);
     }
 
