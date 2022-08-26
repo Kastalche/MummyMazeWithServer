@@ -58,6 +58,15 @@ export class GameServer {
         this.state.Start();
     }
 
+    public Start(): void {
+        this.Transition(GameStates.StartState);
+    }
+
+    public End(): void {
+        this.socketCommunication.broadcast("endGame", {
+            winner: this.gamedate.characters[0],
+        });
+    }
     public BroadcastMessage(message: string, data?: any): void {
         this.socketCommunication.broadcast(message, data);
     }
