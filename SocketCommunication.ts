@@ -12,7 +12,6 @@ export class SocketCommunication {
     private server;
     private io;
 
-    //I think i made this class too big and messy ;( help!!! i need somebody)
     constructor() {
         this.app = express();
         this.server = require("http").createServer(this.app);
@@ -32,9 +31,9 @@ export class SocketCommunication {
         this.io.on("connection", (socket) => {
             if (socket.connected) {
                 console.log("a user connected");
-                //TODO: a user chosses mode and character()
-                //io.on(singleplear, {eventa})
+                //TODO: a user chosses character()
             }
+
             socket.on("singlePlayer", () => {
                 console.log("singlePlayer");
                 this.players.push(new Player(socket, socket.id));
@@ -47,30 +46,32 @@ export class SocketCommunication {
                         GameModes.SinglePlayer
                     ))
                 );
-                console.log(this.players);
-                console.log(this.players[0]);
-                console.log(this.GameServer);
-                console.log(this.gameData);
+                this.GameServer.Start();
                 console.log("GameMaden");
             });
-            //{ current mode= singleplayer players = this player adn so}
+
             socket.on("multiPlayer", () => {
                 console.log("Multiplayer");
-            });
-
-            socket.on("startGame", () => {
+                this.players.push(new Player(socket, socket.id));
                 if (this.players.length == 2) {
                     this.GameServer = new GameServer(
                         this.players,
-                        this,
-                        this.gameData
+                        socket,
+                        (this.gameData = new Game(
+                            this.GameServer,
+                            this.players,
+                            GameModes.Multiplayer
+                        ))
                     );
-                    this.players = [];
+                    this.GameServer.Start();
                 }
-
-                console.log("The game is starting");
-                this.GameServer.Transition(GameStates.StartState);
             });
+
+            // socket.on("startGame", () => {
+            //     console.log("The game is starting");
+            //     this.GameServer.Transition(GameStates.StartState);
+            // });
+
             socket.on("disconnect", () => {
                 console.log("disconnected");
 
@@ -113,26 +114,3 @@ export class SocketCommunication {
         });
     }
 }
-//TODO:  merhod adter creating new gam ->StartGame
-//TODO: Subscribe/Unsubscribe
-//TODO: event for mode
-//TODO: class Player for players not characters(socket.id can be used)
-// public methods- send msg, broadcast, subscibe,unsubscribe.
-
-// if (this.gameData.curentMode == GameModes.SinglePlayer)
-// {this.players.push(
-//     new Player(
-//         socket,
-//         this.gameData.CreateCharacterForPlayer(false),
-//         socket.id
-//     )
-// );}
-
-// else if (this.gameData.curentMode == GameModes.Multiplayer)
-// {
-//     this.players.push(
-//         new Player(
-//             socket,
-//             //this.gameData.CreateCharacterForPlayer(aPlayersChosenCharacter:Boolean);
-//             socket.id
-// }
