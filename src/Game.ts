@@ -16,7 +16,11 @@ export class Game {
 
     public gridManager: GridManager;
 
-    constructor() {}
+    constructor(server: GameServer, players: Array<Player>, mode: GameModes) {
+        this.server = server;
+        this.players = players;
+        this.curentMode = mode;
+    }
 
     public CharactersToStartPosition(): void {
         this.characters.forEach((character) => {
@@ -97,8 +101,8 @@ export class Game {
         }
     }
 
-    public CreateCharacterForPlayer(isMummy: boolean): Character {
-        if (isMummy) {
+    public CreateCharacterForPlayer(player: Player): Character {
+        if (player.isMummy) {
             var characterToAdd = new Character(
                 this.gridManager.tiles[3][5],
                 true,
