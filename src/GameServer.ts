@@ -1,6 +1,5 @@
 import { BattleController } from "./States/BattleContoller";
 import { Character } from "./Entities/Character";
-import { CharacterMovement } from "./Entities/CharacterMovement";
 import { GridManager } from "./Entities/GridManager";
 import { IStateController } from "./States/IStateController";
 import { StartController } from "./States/StartContoller";

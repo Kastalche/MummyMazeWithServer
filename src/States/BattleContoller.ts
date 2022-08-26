@@ -29,7 +29,7 @@ export class BattleController implements IStateController {
         else {
             //this.server.Subscribe("playerMove", this.OnPlayerMoved(this.game.currentCharacter, this.game.currentCharacter.currentPosition));
         }
-        this.server.sendMessage(player, MoveRquest, data);
+        //this.server.sendMessage(player, MoveRquest, data);
         //
     }
 
