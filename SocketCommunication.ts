@@ -34,10 +34,30 @@ export class SocketCommunication {
                 console.log("a user connected");
                 //TODO: a user chosses mode and character()
                 //io.on(singleplear, {eventa})
-                
-                this.io.on("single player", ()=> {
-                    io.start(new GameServer(new Array<players> this.players.push( new player id=socket.id,...., new this.gameData { current mode= singleplayer players = this player adn so}),
-                })
+            }
+            socket.on("singlePlayer", () => {
+                console.log("singlePlayer");
+                this.players.push(new Player(socket, socket.id));
+                this.GameServer = new GameServer(
+                    this.players,
+                    socket,
+                    (this.gameData = new Game(
+                        this.GameServer,
+                        this.players,
+                        GameModes.SinglePlayer
+                    ))
+                );
+                console.log(this.players);
+                console.log(this.players[0]);
+                console.log(this.GameServer);
+                console.log(this.gameData);
+                console.log("GameMaden");
+            });
+            //{ current mode= singleplayer players = this player adn so}
+            socket.on("multiPlayer", () => {
+                console.log("Multiplayer");
+            });
+
             socket.on("startGame", () => {
                 if (this.players.length == 2) {
                     this.GameServer = new GameServer(
@@ -47,10 +67,14 @@ export class SocketCommunication {
                     );
                     this.players = [];
                 }
-                
 
                 console.log("The game is starting");
                 this.GameServer.Transition(GameStates.StartState);
+            });
+            socket.on("disconnect", () => {
+                console.log("disconnected");
+
+                this.broadcast("otherPlayerDisconnected");
             });
         });
     }
@@ -67,17 +91,25 @@ export class SocketCommunication {
         socket.emit(eventName, data);
     }
 
-    public Subscribe(socket,eventName: string, callback:Function, contex:any )
-    {
+    public Subscribe(
+        socket,
+        eventName: string,
+        callback: Function,
+        contex: any
+    ) {
         socket.on(eventName, () => {
-            callback.call(contex)
-        })
+            callback.call(contex);
+        });
     }
 
-    public Unsubscribe(socket,eventName: string, callback:Function, contex:any )
-    {
+    public Unsubscribe(
+        socket,
+        eventName: string,
+        callback: Function,
+        contex: any
+    ) {
         socket.of(eventName, () => {
-            callback.call(contex)
+            callback.call(contex);
         });
     }
 }
