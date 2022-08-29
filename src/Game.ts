@@ -31,27 +31,39 @@ export class Game {
     public AddCharacters(): void {
         switch (this.curentMode) {
             case GameModes.SinglePlayer:
-                this.characters.push(
-                    new Character(this.gridManager.tiles[1][2], false, false) //explorer
-                );
+                var lcharacter = new Character(this.gridManager.tiles[1][2], false, false);
+                this.players[0].character = lcharacter;
+
+                this.characters.push(lcharacter);
+
                 this.characters.push(
                     new Character(this.gridManager.tiles[3][5], true, true) //mummy
                 );
-
-                this.players[0].character = this.characters[0];
                 break;
 
             case GameModes.Multiplayer:
-                //here we will call characterForPlayers :D
-                this.characters.push(
-                    new Character(this.gridManager.tiles[3][5], true, true)
-                );
-                this.characters.push(
-                    new Character(this.gridManager.tiles[1][2], false, false)
-                );
-                this.characters.push(
-                    new Character(this.gridManager.tiles[1][4], false, false)
-                );
+                var isThereAMummyPlayer = false;
+                this.players.forEach(player => {
+                    var lcharacter = this.CreateCharacterForPlayer(player)
+                    player.character = lcharacter;
+                    this.characters.push(lcharacter);
+                });
+                this.players.forEach(player => {
+                    if (player.isMummy == true) {
+                        isThereAMummyPlayer = true;
+                    }
+                });
+
+                if (isThereAMummyPlayer) {
+                    this.characters.push(new Character(this.gridManager.tiles[1][2],
+                        false,
+                        true));
+                }
+                else {
+                    this.characters.push(
+                        new Character(this.gridManager.tiles[3][5], true, true)) //mummy
+                }
+
         }
     }
 
