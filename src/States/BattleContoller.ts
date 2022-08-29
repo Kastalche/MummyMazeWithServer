@@ -25,7 +25,7 @@ export class BattleController implements IStateController {
                 this.game.currentCharacter.currentPosition
             );
         }
-        //TODO: Figure this shit out!
+        //TODO: Figure this shit out! This way or with request?
         else {
             //this.server.Subscribe("playerMove", this.OnPlayerMoved(this.game.currentCharacter, this.game.currentCharacter.currentPosition));
         }
@@ -38,12 +38,12 @@ export class BattleController implements IStateController {
             this.ApplyMove(player.character, move);
             this.game.NextCurrentCharacter();
         } else {
-            //generate player move
-            this.game.NextCurrentCharacter();
+            this.OnPlayerMoved(move,player);
         }
     }
 
     private ApplyMove(ActiveCharacter: Character, NewCurrentTile: Tile): void {
+        ActiveCharacter.currentPosition=NewCurrentTile;
         this.server.BroadcastMessage("applyMove", {
             ActiveCharacter: Character,
             NewCurrentTile: Tile,
@@ -51,7 +51,7 @@ export class BattleController implements IStateController {
     }
 
     public NextState(): void {
-        if (this.game.characters.length > 1) {
+        if (!this.game.CheckForBattleEnd) {
             this.game.NextCurrentCharacter();
             this.server.Transition(GameStates.BattleState);
         } else {

@@ -77,6 +77,10 @@ export class SocketCommunication {
 
                 this.broadcast("otherPlayerDisconnected");
             });
+
+            socket.on("applyMove", ()=>{
+                console.log("Aplied Move?")
+            });
         });
     }
 
