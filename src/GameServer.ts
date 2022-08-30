@@ -78,8 +78,18 @@ export class GameServer {
     public Subscribe(eventName: string, event: void) {
         this.socketCommunication.Subscribe(
             null,
-            "quit",
+            "add",
             this.state.Start,
+            this.state
+        );
+    }
+
+    public Unsubscrube(eventName: string, event: void)
+    {
+        this.socketCommunication.Unsubscribe(
+            null,
+            "quit",
+            this.state.Destroy,
             this.state
         );
     }
