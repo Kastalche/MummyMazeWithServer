@@ -63,10 +63,13 @@ export class BotLogic {
     }
 
     public FindExplorerTile(mummy: Character): Tile {
-        var targetPlayer = this.CompareExplores(mummy);
-        var target = targetPlayer.currentPosition;
-        return this.gridManager.tiles[target.x][target.y];
-        //if this row works I will buy myself a balkanche
+        if (mummy.isMummy) {
+            var targetPlayer = this.CompareExplores(mummy);
+            var target = targetPlayer.currentPosition;
+            return this.gridManager.tiles[target.x][target.y];
+            //if this row works I will buy myself a balkanche
+        }
+        else return this.gridManager.tiles[0][5];
     }
 
     private BotMoveHorizontally(bot: Character) {
