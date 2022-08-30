@@ -14,7 +14,6 @@ export class StartController implements IStateController {
     }
 
     public Start(): void {
-        //everything except players and mode should be assined here by methods from game ;)
         this.game.AddCharacters();
         this.game.CharactersToStartPosition();
         this.game.currentCharacter=this.game.characters[0];
