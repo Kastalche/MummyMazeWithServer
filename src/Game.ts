@@ -13,6 +13,7 @@ export class Game {
     public curentMode: GameModes;
     public currentCharacter: Character = null;
     public currentCharacterIndex: number;
+    public currentPlayer: Player;
 
     public gridManager: GridManager;
 
@@ -139,5 +140,12 @@ export class Game {
     public CheckForBattleEnd(): boolean {
         if (this.characters.length <= 1) return true;
         else return false;
+    }
+
+    public FindCurrentPlayer() : Player{
+        for (let index = 0; index < this.players.length; index++) {
+            if(this.players[index].character==this.currentCharacter)
+            return this.players[index];
+        }
     }
 }
