@@ -20,17 +20,12 @@ export class BattleController implements IStateController {
                 this.game.currentCharacter,
                 this.game
             );
-            this.ApplyMove(
-                this.game.currentCharacter,
-                this.game.currentCharacter.currentPosition
-            );
+            this.NextState();
         }
-        //TODO: Figure this shit out! This way or with request?
-        else {
-            //this.server.Subscribe("playerMove", this.OnPlayerMoved(this.game.currentCharacter, this.game.currentCharacter.currentPosition));
-        }
-        //this.server.sendMessage(player, MoveRquest, data);
-        //
+            else{
+                this.server.Subscribe("playerMove", this.OnPlayerMoved(this.game.currentCharacter.currentPosition,this.game.FindCurrentPlayer()));
+                this.NextState();
+            }
     }
 
     private OnPlayerMoved(move: Tile, player: Player): void {
@@ -60,7 +55,7 @@ export class BattleController implements IStateController {
     }
 
     public Destroy(): void {
-        //unsubscribe
+        //this.server.Unsubscrube("PlayerMoved", this.OnPlayerMoved);
     }
 
     public IsMoveValid(player: Player, move: Tile): boolean {
