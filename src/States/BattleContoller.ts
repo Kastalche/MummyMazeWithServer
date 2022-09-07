@@ -21,24 +21,30 @@ export class BattleController implements IStateController {
                 this.game
             );
             this.NextState();
+        } else {
+            this.server.Subscribe(
+                "playerMove",
+                this.OnPlayerMoved(this.game.currentCharacter.currentPosition)
+            );
+            this.NextState();
         }
-            else{
-                this.server.Subscribe("playerMove", this.OnPlayerMoved(this.game.currentCharacter.currentPosition,this.game.FindCurrentPlayer()));
-                this.NextState();
-            }
     }
 
-    private OnPlayerMoved(move: Tile, player: Player): void {
-        if (this.IsMoveValid(player, move)) {
-            this.ApplyMove(player.character, move);
+    public onPlayerMessage(msg: JSON): void {
+        let move: Tile = JSON.parse(JSON.stringify(msg));
+    }
+
+    private OnPlayerMoved(move: Tile): void {
+        if (this.IsMoveValid(this.game.currentPlayer, move)) {
+            this.ApplyMove(this.game.currentPlayer.character, move);
             this.game.NextCurrentCharacter();
         } else {
-            this.OnPlayerMoved(move,player);
+            this.OnPlayerMoved(move);
         }
     }
 
     private ApplyMove(ActiveCharacter: Character, NewCurrentTile: Tile): void {
-        ActiveCharacter.currentPosition=NewCurrentTile;
+        ActiveCharacter.currentPosition = NewCurrentTile;
         this.server.BroadcastMessage("applyMove", {
             ActiveCharacter: Character,
             NewCurrentTile: Tile,
@@ -71,4 +77,6 @@ export class BattleController implements IStateController {
             return false;
         }
     }
+
+    public KillExplorer(): void {}
 }

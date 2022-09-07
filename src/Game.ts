@@ -1,5 +1,5 @@
 import { GameModes, GameServer } from "./GameServer";
-import { Character } from "./Entities/Character";
+import { Character } from './Entities/Character';
 import { Player } from "./Player";
 import { GridManager } from "./Entities/GridManager";
 import { Tile } from "./Entities/Tile";
@@ -7,7 +7,7 @@ import { stripVTControlCharacters } from "util";
 
 export class Game {
     private server: GameServer;
-    private players: Array<Player>;
+    public players: Array<Player>;
     public characters: Array<Character>;
 
     public curentMode: GameModes;
@@ -32,7 +32,11 @@ export class Game {
     public AddCharacters(): void {
         switch (this.curentMode) {
             case GameModes.SinglePlayer:
-                var lcharacter = new Character(this.gridManager.tiles[1][2], false, false);
+                var lcharacter = new Character(
+                    this.gridManager.tiles[1][2],
+                    false,
+                    false
+                );
                 this.players[0].character = lcharacter;
 
                 this.characters.push(lcharacter);
@@ -44,27 +48,26 @@ export class Game {
 
             case GameModes.Multiplayer:
                 var isThereAMummyPlayer = false;
-                this.players.forEach(player => {
-                    var lcharacter = this.CreateCharacterForPlayer(player)
+                this.players.forEach((player) => {
+                    var lcharacter = this.CreateCharacterForPlayer(player);
                     player.character = lcharacter;
                     this.characters.push(lcharacter);
                 });
-                this.players.forEach(player => {
+                this.players.forEach((player) => {
                     if (player.isMummy == true) {
                         isThereAMummyPlayer = true;
                     }
                 });
 
                 if (isThereAMummyPlayer) {
-                    this.characters.push(new Character(this.gridManager.tiles[1][2],
-                        false,
-                        true));
-                }
-                else {
                     this.characters.push(
-                        new Character(this.gridManager.tiles[3][5], true, true)) //mummy
+                        new Character(this.gridManager.tiles[1][2], false, true)
+                    );
+                } else {
+                    this.characters.push(
+                        new Character(this.gridManager.tiles[3][5], true, true)
+                    ); //mummy
                 }
-
         }
     }
 
@@ -142,10 +145,28 @@ export class Game {
         else return false;
     }
 
-    public FindCurrentPlayer() : Player{
+    public FindCurrentPlayer(): Player {
         for (let index = 0; index < this.players.length; index++) {
-            if(this.players[index].character==this.currentCharacter)
-            return this.players[index];
+            if (this.players[index].character == this.currentCharacter)
+                return this.players[index];
+        }
+    }
+    public FindMummyPosition():Tile
+    {
+        for (let index = 0; index < this.characters.length; index++) {
+            if(this.characters[index].isMummy==true)
+            return this.characters[index].currentPosition;
+        }
+    }
+
+    public NextPlayer()
+    {
+        //
+    }
+    public KillExplorer(explorer:Character):void{
+        if(explorer.currentPosition==this.FindMummyPosition())
+        {
+            delete(t
         }
     }
 }

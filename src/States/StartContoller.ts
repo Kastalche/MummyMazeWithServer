@@ -16,7 +16,9 @@ export class StartController implements IStateController {
     public Start(): void {
         this.game.AddCharacters();
         this.game.CharactersToStartPosition();
-        this.game.currentCharacter=this.game.characters[0];
+
+        this.game.currentCharacter = this.game.characters[0];
+        this.game.currentPlayer = this.game.players[0];
 
         this.server.BroadcastMessage("BattleState");
         this.server.Transition(GameStates.BattleState);

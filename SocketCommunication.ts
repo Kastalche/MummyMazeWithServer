@@ -3,6 +3,8 @@ import { Character } from "./src/Entities/Character";
 import { Player } from "./src/Player";
 import express from "express";
 import { Game } from "./src/Game";
+import { Tile } from "./src/Entities/Tile";
+import { BattleController } from "./src/States/BattleContoller";
 export class SocketCommunication {
     private players: Player[] = new Array();
     private GameServer: GameServer = null;
@@ -78,9 +80,7 @@ export class SocketCommunication {
                 this.broadcast("otherPlayerDisconnected");
             });
 
-            socket.on("applyMove", ()=>{
-                console.log("Aplied Move?")
-            });
+            socket.on("playerMove", (arg1) => {});
         });
     }
 

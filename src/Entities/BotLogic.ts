@@ -68,8 +68,7 @@ export class BotLogic {
             var target = targetPlayer.currentPosition;
             return this.gridManager.tiles[target.x][target.y];
             //if this row works I will buy myself a balkanche
-        }
-        else return this.gridManager.tiles[0][5];
+        } else return this.gridManager.tiles[0][5];
     }
 
     private BotMoveHorizontally(bot: Character) {
