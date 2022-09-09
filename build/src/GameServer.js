@@ -38,14 +38,28 @@ var GameServer = /** @class */ (function () {
         }
         this.state.Start();
     };
+    GameServer.prototype.Start = function () {
+        this.Transition(GameStates.StartState);
+    };
+    GameServer.prototype.End = function () {
+        this.socketCommunication.broadcast("endGame", {
+            winner: this.gamedate.characters[0],
+        });
+    };
     GameServer.prototype.BroadcastMessage = function (message, data) {
         this.socketCommunication.broadcast(message, data);
     };
     GameServer.prototype.SendMessage = function (socket, message, data) {
         this.socketCommunication.sendDataToClient(socket, message, data);
     };
+    GameServer.prototype.SendToClient = function (message) {
+        this.socketCommunication.sendToClient(this.socketCommunication, message);
+    };
     GameServer.prototype.Subscribe = function (eventName, event) {
-        this.socketCommunication.Subscribe(null, "quit", this.state.Start, this.state);
+        this.socketCommunication.Subscribe(null, "add", this.state.Start, this.state);
+    };
+    GameServer.prototype.Unsubscrube = function (eventName, event) {
+        this.socketCommunication.Unsubscribe(null, "quit", this.state.Destroy, this.state);
     };
     return GameServer;
 }());

@@ -75,6 +75,13 @@ export class GameServer {
         this.socketCommunication.sendDataToClient(socket, message, data);
     }
 
+    public SendToClient(message: string) {
+        this.socketCommunication.sendToClient(
+            this.socketCommunication,
+            message
+        );
+    }
+
     public Subscribe(eventName: string, event: void) {
         this.socketCommunication.Subscribe(
             null,
@@ -84,8 +91,7 @@ export class GameServer {
         );
     }
 
-    public Unsubscrube(eventName: string, event: void)
-    {
+    public Unsubscrube(eventName: string, event: void) {
         this.socketCommunication.Unsubscribe(
             null,
             "quit",

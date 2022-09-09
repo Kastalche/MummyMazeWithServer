@@ -16,15 +16,33 @@ var Game = /** @class */ (function () {
         });
     };
     Game.prototype.AddCharacters = function () {
+        var _this = this;
         switch (this.curentMode) {
             case GameServer_1.GameModes.SinglePlayer:
-                this.characters.push(new Character_1.Character(this.gridManager.tiles[3][5], true, true));
-                this.characters.push(new Character_1.Character(this.gridManager.tiles[1][2], false, false));
+                var lcharacter = new Character_1.Character(this.gridManager.tiles[1][2], false, false);
+                this.players[0].character = lcharacter;
+                this.characters.push(lcharacter);
+                this.characters.push(new Character_1.Character(this.gridManager.tiles[3][5], true, true) //mummy
+                );
                 break;
             case GameServer_1.GameModes.Multiplayer:
-                this.characters.push(new Character_1.Character(this.gridManager.tiles[3][5], true, true));
-                this.characters.push(new Character_1.Character(this.gridManager.tiles[1][2], false, false));
-                this.characters.push(new Character_1.Character(this.gridManager.tiles[1][4], false, false));
+                var isThereAMummyPlayer = false;
+                this.players.forEach(function (player) {
+                    var lcharacter = _this.CreateCharacterForPlayer(player);
+                    player.character = lcharacter;
+                    _this.characters.push(lcharacter);
+                });
+                this.players.forEach(function (player) {
+                    if (player.isMummy == true) {
+                        isThereAMummyPlayer = true;
+                    }
+                });
+                if (isThereAMummyPlayer) {
+                    this.characters.push(new Character_1.Character(this.gridManager.tiles[1][2], false, true));
+                }
+                else {
+                    this.characters.push(new Character_1.Character(this.gridManager.tiles[3][5], true, true)); //mummy
+                }
         }
     };
     Game.prototype.IsAvailableFrom = function (targetTile, yourTile) {
@@ -100,6 +118,40 @@ var Game = /** @class */ (function () {
             return true;
         else
             return false;
+    };
+    Game.prototype.FindCurrentPlayer = function () {
+        for (var index = 0; index < this.players.length; index++) {
+            if (this.players[index].character == this.currentCharacter)
+                return this.players[index];
+        }
+    };
+    Game.prototype.FindMummyPosition = function () {
+        for (var index = 0; index < this.characters.length; index++) {
+            if (this.characters[index].isMummy == true)
+                return this.characters[index].currentPosition;
+        }
+    };
+    Game.prototype.KillExplorer = function (explorer) {
+        if (explorer.currentPosition == this.FindMummyPosition()) {
+            var index = this.characters.indexOf(explorer);
+            if (index > -1) {
+                this.characters.splice(index, 1);
+            }
+        }
+    };
+    Game.prototype.MummiesTurn = function () {
+        var _this = this;
+        this.characters.forEach(function (character) {
+            if (character.isMummy == true) {
+                if (character.isBot == true) {
+                    _this.botLogic.GenerateBotMove(character);
+                }
+                else {
+                    _this.server.SendToClient("RequestMove");
+                    _this.server.Subscribe;
+                }
+            }
+        });
     };
     return Game;
 }());

@@ -11,7 +11,6 @@ var EndController = /** @class */ (function () {
                 winner: this.game.characters[0],
             });
         }
-        //this.socket.EndGame()
     };
     EndController.prototype.Destroy = function () {
         //unsubscribe

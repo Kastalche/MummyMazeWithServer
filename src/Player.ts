@@ -9,8 +9,4 @@ export class Player {
         this.socket = socket;
         this.id = id;
     }
-
-    // public AddCharacterToPlayer(character: Character) {
-    //     this.character = character;
-    // }
 }

@@ -1,9 +1,10 @@
 import { GameModes, GameServer } from "./GameServer";
-import { Character } from './Entities/Character';
+import { Character } from "./Entities/Character";
 import { Player } from "./Player";
 import { GridManager } from "./Entities/GridManager";
 import { Tile } from "./Entities/Tile";
 import { stripVTControlCharacters } from "util";
+import { BotLogic } from "./Entities/BotLogic";
 
 export class Game {
     private server: GameServer;
@@ -16,6 +17,7 @@ export class Game {
     public currentPlayer: Player;
 
     public gridManager: GridManager;
+    public botLogic: BotLogic;
 
     constructor(server: GameServer, players: Array<Player>, mode: GameModes) {
         this.server = server;
@@ -151,22 +153,34 @@ export class Game {
                 return this.players[index];
         }
     }
-    public FindMummyPosition():Tile
-    {
+
+    public FindMummyPosition(): Tile {
         for (let index = 0; index < this.characters.length; index++) {
-            if(this.characters[index].isMummy==true)
-            return this.characters[index].currentPosition;
+            if (this.characters[index].isMummy == true)
+                return this.characters[index].currentPosition;
         }
     }
 
-    public NextPlayer()
-    {
-        //
-    }
-    public KillExplorer(explorer:Character):void{
-        if(explorer.currentPosition==this.FindMummyPosition())
-        {
-            delete(t
+    public KillExplorer(explorer: Character): void {
+        if (explorer.currentPosition == this.FindMummyPosition()) {
+            var index = this.characters.indexOf(explorer);
+            if (index > -1) {
+                this.characters.splice(index, 1);
+            }
         }
+    }
+
+    public MummiesTurn(): void {
+        this.characters.forEach((character) => {
+            if (character.isMummy == true) {
+                if (character.isBot == true) {
+                    this.botLogic.GenerateBotMove(character);
+                } else {
+                    this.server.SendToClient("RequestMove");
+                    this.server.SendD;
+                    //this.server.Subscribe("SendMove")
+                }
+            }
+        });
     }
 }

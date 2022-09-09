@@ -9,7 +9,9 @@ var StartController = /** @class */ (function () {
     StartController.prototype.Start = function () {
         this.game.AddCharacters();
         this.game.CharactersToStartPosition();
-        this.server.BroadcastMessage("StartBattle");
+        this.game.currentCharacter = this.game.characters[0];
+        this.game.currentPlayer = this.game.players[0];
+        this.server.BroadcastMessage("BattleState");
         this.server.Transition(GameServer_1.GameStates.BattleState);
     };
     StartController.prototype.Destroy = function () { };

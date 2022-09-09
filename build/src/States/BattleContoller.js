@@ -10,34 +10,37 @@ var BattleController = /** @class */ (function () {
     }
     BattleController.prototype.Start = function () {
         if (this.game.currentCharacter.isBot) {
-            this.botLogic.GenerateBotMove(this.game.currentCharacter, this.game);
-            this.ApplyMove(this.game.currentCharacter, this.game.currentCharacter.currentPosition);
+            this.botLogic.GenerateBotMove(this.game.currentCharacter);
+            this.NextState();
         }
-        //TODO: Figure this shit out!
         else {
-            //this.server.Subscribe("playerMove", this.OnPlayerMoved(this.game.currentCharacter, this.game.currentCharacter.currentPosition));
+            this.server.Subscribe("playerMove", this.OnPlayerMoved(this.onPlayerSentTile));
+            this.NextState();
         }
-        //this.server.sendMessage(player, MoveRquest, data);
-        //
     };
-    BattleController.prototype.OnPlayerMoved = function (move, player) {
-        if (this.IsMoveValid(player, move)) {
-            this.ApplyMove(player.character, move);
+    BattleController.prototype.onPlayerSentTile = function (msg) {
+        var move = JSON.parse(JSON.stringify(msg));
+        return move;
+    };
+    BattleController.prototype.OnPlayerMoved = function (move) {
+        if (this.IsMoveValid(this.game.currentPlayer, move)) {
+            this.ApplyMove(this.game.currentPlayer.character, move);
             this.game.NextCurrentCharacter();
         }
         else {
-            //generate player move
-            this.game.NextCurrentCharacter();
+            this.OnPlayerMoved(move);
         }
     };
     BattleController.prototype.ApplyMove = function (ActiveCharacter, NewCurrentTile) {
-        this.server.BroadcastMessage("applyMove", {
-            ActiveCharacter: Character_1.Character,
-            NewCurrentTile: Tile_1.Tile,
+        ActiveCharacter.currentPosition = NewCurrentTile;
+        this.server.BroadcastMessage("ApplyMove", {
+            activeCharacter: Character_1.Character,
+            newCurrentTile: Tile_1.Tile,
         });
     };
     BattleController.prototype.NextState = function () {
-        if (this.game.characters.length > 1) {
+        this.CheckForDeadExplorers();
+        if (!this.game.CheckForBattleEnd) {
             this.game.NextCurrentCharacter();
             this.server.Transition(GameServer_1.GameStates.BattleState);
         }
@@ -46,7 +49,7 @@ var BattleController = /** @class */ (function () {
         }
     };
     BattleController.prototype.Destroy = function () {
-        //unsubscribe
+        this.server.Unsubscrube("PlayerMoved", this.OnPlayerMoved(this.game.currentCharacter.currentPosition));
     };
     BattleController.prototype.IsMoveValid = function (player, move) {
         if (player.character == this.game.currentCharacter &&
@@ -55,6 +58,11 @@ var BattleController = /** @class */ (function () {
         }
         else {
             return false;
+        }
+    };
+    BattleController.prototype.CheckForDeadExplorers = function () {
+        for (var index = 0; index < this.game.characters.length; index++) {
+            this.game.KillExplorer(this.game.characters[index]);
         }
     };
     return BattleController;

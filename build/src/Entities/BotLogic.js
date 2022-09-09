@@ -5,7 +5,7 @@ var GameServer_1 = require("../GameServer");
 var BotLogic = /** @class */ (function () {
     function BotLogic() {
     }
-    BotLogic.prototype.GenerateBotMove = function (bot, gamedata) {
+    BotLogic.prototype.GenerateBotMove = function (bot) {
         if (bot.isMummy) {
             if (this.BotNotOnTargetX(bot)) {
                 this.BotMoveHorizontally(bot);
@@ -51,10 +51,14 @@ var BotLogic = /** @class */ (function () {
         }
     };
     BotLogic.prototype.FindExplorerTile = function (mummy) {
-        var targetPlayer = this.CompareExplores(mummy);
-        var target = targetPlayer.currentPosition;
-        return this.gridManager.tiles[target.x][target.y];
-        //if this row works I will buy myself a balkanche
+        if (mummy.isMummy) {
+            var targetPlayer = this.CompareExplores(mummy);
+            var target = targetPlayer.currentPosition;
+            return this.gridManager.tiles[target.x][target.y];
+            //if this row works I will buy myself a balkanche
+        }
+        else
+            return this.gridManager.tiles[0][5];
     };
     BotLogic.prototype.BotMoveHorizontally = function (bot) {
         var botPos = bot.currentPosition;

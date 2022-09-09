@@ -6,9 +6,6 @@ var Player = /** @class */ (function () {
         this.socket = socket;
         this.id = id;
     }
-    Player.prototype.AddCharacterToPlayer = function (character) {
-        this.character = character;
-    };
     return Player;
 }());
 exports.Player = Player;

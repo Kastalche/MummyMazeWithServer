@@ -69,18 +69,13 @@ export class SocketCommunication {
                 }
             });
 
-            // socket.on("startGame", () => {
-            //     console.log("The game is starting");
-            //     this.GameServer.Transition(GameStates.StartState);
-            // });
-
             socket.on("disconnect", () => {
                 console.log("disconnected");
 
                 this.broadcast("otherPlayerDisconnected");
             });
 
-            socket.on("playerMove", (arg1) => {});
+            //socket.on("playerMove", (arg1) => {});
         });
     }
 
@@ -88,11 +83,7 @@ export class SocketCommunication {
         this.io.sockets.emit(eventName, data);
     }
 
-    public sendToClient(socket, eventName: string): void {
-        socket.emit(eventName);
-    }
-
-    public sendDataToClient(socket, eventName: string, data?: any): void {
+    public sendMessage(socket, eventName: string, data?: any): void {
         socket.emit(eventName, data);
     }
 
@@ -106,6 +97,7 @@ export class SocketCommunication {
             callback.call(contex);
         });
     }
+    //check if this subscribe is correct
 
     public Unsubscribe(
         socket,

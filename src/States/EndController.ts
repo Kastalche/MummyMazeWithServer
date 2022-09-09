@@ -18,7 +18,6 @@ export class EndController implements IStateController {
                 winner: this.game.characters[0],
             });
         }
-        //this.socket.EndGame()
     }
 
     Destroy(): void {

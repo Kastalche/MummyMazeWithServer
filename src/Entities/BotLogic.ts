@@ -9,7 +9,7 @@ export class BotLogic {
     gridManager: GridManager;
     gamedata: Game;
 
-    public GenerateBotMove(bot: Character, gamedata: Game): void {
+    public GenerateBotMove(bot: Character): void {
         if (bot.isMummy) {
             if (this.BotNotOnTargetX(bot)) {
                 this.BotMoveHorizontally(bot);
