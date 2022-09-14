@@ -33,6 +33,7 @@ export class SocketCommunication {
         this.io.on("connection", (socket) => {
             if (socket.connected) {
                 console.log("a user connected");
+                this.broadcast("PlayerId", socket.id);
                 //TODO: a user chosses character()
             }
 
