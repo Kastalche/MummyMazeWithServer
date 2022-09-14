@@ -72,14 +72,7 @@ export class GameServer {
     }
 
     public SendMessage(socket, message: string, data?: any) {
-        this.socketCommunication.sendDataToClient(socket, message, data);
-    }
-
-    public SendToClient(message: string) {
-        this.socketCommunication.sendToClient(
-            this.socketCommunication,
-            message
-        );
+        this.socketCommunication.sendMessage(socket, message, data);
     }
 
     public Subscribe(eventName: string, event: void) {

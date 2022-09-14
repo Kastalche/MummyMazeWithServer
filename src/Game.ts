@@ -5,6 +5,7 @@ import { GridManager } from "./Entities/GridManager";
 import { Tile } from "./Entities/Tile";
 import { stripVTControlCharacters } from "util";
 import { BotLogic } from "./Entities/BotLogic";
+import { Socket } from "dgram";
 
 export class Game {
     private server: GameServer;
@@ -176,8 +177,7 @@ export class Game {
                 if (character.isBot == true) {
                     this.botLogic.GenerateBotMove(character);
                 } else {
-                    this.server.SendToClient("RequestMove");
-                    this.server.SendD;
+                    this.server.SendMessage(this, "RequestMove");
                     //this.server.Subscribe("SendMove")
                 }
             }
