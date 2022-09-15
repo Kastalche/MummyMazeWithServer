@@ -13,11 +13,10 @@ export class EndController implements IStateController {
     }
 
     Start(): void {
-        if (this.game.CheckForBattleEnd) {
-            this.server.BroadcastMessage("endGame", {
-                winner: this.game.characters[0],
-            });
-        }
+        this.server.BroadcastMessage("endGame", {
+            id: this.game.characters[0].id,
+            winner: this.game.characters[0],
+        });
     }
 
     Destroy(): void {

@@ -94,8 +94,8 @@ export class SocketCommunication {
         callback: Function,
         contex: any
     ) {
-        socket.on(eventName, () => {
-            callback.call(contex);
+        socket.on(eventName, (arg?) => {
+            callback.call(contex, arg);
         });
     }
     //check if this subscribe is correct

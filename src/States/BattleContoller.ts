@@ -19,11 +19,7 @@ export class BattleController implements IStateController {
             this.botLogic.GenerateBotMove(this.game.currentCharacter);
             this.NextState();
         } else {
-            this.server.Subscribe(
-                "playerMove",
-                this.OnPlayerMoved(this.onPlayerSentTile)
-            );
-
+            this.server.Subscribe("playerMove", this.OnPlayerMoved(data));
             this.NextState();
         }
     }
@@ -44,7 +40,6 @@ export class BattleController implements IStateController {
 
     private ApplyMove(ActiveCharacter: Character, NewCurrentTile: Tile): void {
         ActiveCharacter.currentPosition = NewCurrentTile;
-
         this.server.BroadcastMessage("ApplyMove", {
             activeCharacter: Character,
             newCurrentTile: Tile,
@@ -53,20 +48,12 @@ export class BattleController implements IStateController {
 
     public NextState(): void {
         this.CheckForDeadExplorers();
-
         if (!this.game.CheckForBattleEnd) {
             this.game.NextCurrentCharacter();
             this.server.Transition(GameStates.BattleState);
         } else {
             this.server.Transition(GameStates.EndState);
         }
-    }
-
-    public Destroy(): void {
-        this.server.Unsubscrube(
-            "PlayerMoved",
-            this.OnPlayerMoved(this.game.currentCharacter.currentPosition)
-        );
     }
 
     public IsMoveValid(player: Player, move: Tile): boolean {
@@ -87,5 +74,12 @@ export class BattleController implements IStateController {
         for (let index = 0; index < this.game.characters.length; index++) {
             this.game.KillExplorer(this.game.characters[index]);
         }
+    }
+
+    public Destroy(): void {
+        this.server.Unsubscrube(
+            "PlayerMoved",
+            this.OnPlayerMoved(this.game.currentCharacter.currentPosition)
+        );
     }
 }
