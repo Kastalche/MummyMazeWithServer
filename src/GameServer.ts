@@ -36,11 +36,10 @@ export class GameServer {
     }
 
     public Transition(newState: GameStates): void {
-        this.state.Destroy();
-
+        this.state?.Destroy();
         switch (newState) {
             case GameStates.StartState:
-                this.state = new StartController(this);
+                this.state = new StartController(this, this.gamedate);
                 break;
 
             case GameStates.BattleState:
@@ -50,9 +49,6 @@ export class GameServer {
             case GameStates.EndState:
                 this.state = new EndController(this);
                 break;
-
-            default:
-                break;
         }
 
         this.state.Start();
@@ -60,6 +56,7 @@ export class GameServer {
 
     public Start(): void {
         this.Transition(GameStates.StartState);
+        this.BroadcastMessage("StartState");
     }
 
     public BroadcastMessage(message: string, data?: any): void {

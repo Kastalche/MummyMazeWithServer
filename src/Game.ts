@@ -35,14 +35,14 @@ export class Game {
     public AddCharacters(): void {
         switch (this.curentMode) {
             case GameModes.SinglePlayer:
-                var lcharacter = new Character(
+                var plCharacter = new Character(
                     this.gridManager.tiles[1][2],
                     false,
                     false
                 );
-                this.players[0].character = lcharacter;
+                this.players[0].character = plCharacter;
 
-                this.characters.push(lcharacter);
+                this.characters.push(plCharacter);
 
                 this.characters.push(
                     new Character(this.gridManager.tiles[3][5], true, true) //mummy
@@ -52,9 +52,9 @@ export class Game {
             case GameModes.Multiplayer:
                 var isThereAMummyPlayer = false;
                 this.players.forEach((player) => {
-                    var lcharacter = this.CreateCharacterForPlayer(player);
-                    player.character = lcharacter;
-                    this.characters.push(lcharacter);
+                    var plCharacter = this.CreateCharacterForPlayer(player);
+                    player.character = plCharacter;
+                    this.characters.push(plCharacter);
                 });
                 this.players.forEach((player) => {
                     if (player.isMummy == true) {
@@ -155,6 +155,12 @@ export class Game {
         }
     }
 
+    public FindAPlayerByCharacter(character: Character): Player {
+        for (let index = 0; index < this.players.length; index++)
+            if (this.players[index].character == character)
+                return this.players[index];
+    }
+
     public FindMummyPosition(): Tile {
         for (let index = 0; index < this.characters.length; index++) {
             if (this.characters[index].isMummy == true)
@@ -167,11 +173,14 @@ export class Game {
             var index = this.characters.indexOf(explorer);
             if (index > -1) {
                 this.characters.splice(index, 1);
+                var deadPlayer = this.FindAPlayerByCharacter(explorer);
+                this.server.BroadcastMessage("deadPlayer", deadPlayer);
             }
         }
     }
 
     public MummiesTurn(): void {
+        //TODO: implement currrent player, character logic
         this.characters.forEach((character) => {
             if (character.isMummy == true) {
                 if (character.isBot == true) {

@@ -15,12 +15,16 @@ export class StartController implements IStateController {
     }
 
     public Start(): void {
+        console.log("vleznahme li tuka");
+        this.game.gridManager.GenerateGrid();
+        this.game.gridManager.GenerateObstacles();
+        console.log("generated grid");
+
         this.game.AddCharacters();
-        console.log("startcontroller start");
         this.game.CharactersToStartPosition();
         this.game.NextCurrentCharacter();
-
         this.game.currentPlayer = this.game.players[0];
+        console.log("startcontroller start");
 
         this.server.BroadcastMessage("BattleState");
         this.server.Transition(GameStates.BattleState);
