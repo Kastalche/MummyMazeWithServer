@@ -8,11 +8,15 @@ var StartController = /** @class */ (function () {
         this.game = game;
     }
     StartController.prototype.Start = function () {
+        console.log("vleznahme li tuka");
+        this.game.gridManager.GenerateGrid();
+        this.game.gridManager.GenerateObstacles();
+        console.log("generated grid");
         this.game.AddCharacters();
-        console.log("startcontroller start");
         this.game.CharactersToStartPosition();
-        this.game.currentCharacter = this.game.characters[0];
+        this.game.NextCurrentCharacter();
         this.game.currentPlayer = this.game.players[0];
+        console.log("startcontroller start");
         this.server.BroadcastMessage("BattleState");
         this.server.Transition(GameServer_1.GameStates.BattleState);
     };

@@ -15,6 +15,7 @@ var GridManager = /** @class */ (function () {
                 this.tiles[i][j] = new Tile_1.Tile(i, j);
             }
         }
+        return this.tiles;
     };
     GridManager.prototype.AddObstacles = function (x, y, obstacle) {
         this.tiles[x][y].obstacles.push(obstacle);

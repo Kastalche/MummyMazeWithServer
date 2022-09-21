@@ -36,6 +36,7 @@ var SocketCommunication = /** @class */ (function () {
                 console.log("singlePlayer");
                 _this.players.push(new Player_1.Player(socket, socket.id));
                 _this.GameServer = new GameServer_1.GameServer(_this.players, socket, (_this.gameData = new Game_1.Game(_this.GameServer, _this.players, GameServer_1.GameModes.SinglePlayer)));
+                console.log("GameMaden");
                 _this.GameServer.Start();
                 console.log("GameMaden");
             });
