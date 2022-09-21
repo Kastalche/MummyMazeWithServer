@@ -6,11 +6,10 @@ var EndController = /** @class */ (function () {
         this.server = server;
     }
     EndController.prototype.Start = function () {
-        if (this.game.CheckForBattleEnd) {
-            this.server.BroadcastMessage("endGame", {
-                winner: this.game.characters[0],
-            });
-        }
+        this.server.BroadcastMessage("endGame", {
+            id: this.game.characters[0].id,
+            winner: this.game.characters[0],
+        });
     };
     EndController.prototype.Destroy = function () {
         //unsubscribe

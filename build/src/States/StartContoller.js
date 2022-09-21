@@ -3,11 +3,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.StartController = void 0;
 var GameServer_1 = require("../GameServer");
 var StartController = /** @class */ (function () {
-    function StartController(server) {
+    function StartController(server, game) {
         this.server = server;
+        this.game = game;
     }
     StartController.prototype.Start = function () {
         this.game.AddCharacters();
+        console.log("startcontroller start");
         this.game.CharactersToStartPosition();
         this.game.currentCharacter = this.game.characters[0];
         this.game.currentPlayer = this.game.players[0];

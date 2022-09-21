@@ -9,15 +9,17 @@ export class StartController implements IStateController {
     public mode: GameModes;
     private game: Game;
 
-    constructor(server: GameServer) {
+    constructor(server: GameServer, game: Game) {
         this.server = server;
+        this.game = game;
     }
 
     public Start(): void {
         this.game.AddCharacters();
+        console.log("startcontroller start");
         this.game.CharactersToStartPosition();
+        this.game.NextCurrentCharacter();
 
-        this.game.currentCharacter = this.game.characters[0];
         this.game.currentPlayer = this.game.players[0];
 
         this.server.BroadcastMessage("BattleState");

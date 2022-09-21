@@ -19,7 +19,11 @@ export class BattleController implements IStateController {
             this.botLogic.GenerateBotMove(this.game.currentCharacter);
             this.NextState();
         } else {
-            this.server.Subscribe("playerMove", this.OnPlayerMoved(data));
+            this.server.Subscribe(
+                "playerMove",
+                //TODO: wrong tile
+                this.OnPlayerMoved(new Tile[1][2]())
+            );
             this.NextState();
         }
     }
