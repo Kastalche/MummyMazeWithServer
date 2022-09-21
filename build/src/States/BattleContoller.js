@@ -14,7 +14,9 @@ var BattleController = /** @class */ (function () {
             this.NextState();
         }
         else {
-            this.server.Subscribe("playerMove", this.OnPlayerMoved(this.onPlayerSentTile));
+            this.server.Subscribe("playerMove", 
+            //TODO: wrong tile
+            this.OnPlayerMoved(new Tile_1.Tile[1][2]()));
             this.NextState();
         }
     };
@@ -48,9 +50,6 @@ var BattleController = /** @class */ (function () {
             this.server.Transition(GameServer_1.GameStates.EndState);
         }
     };
-    BattleController.prototype.Destroy = function () {
-        this.server.Unsubscrube("PlayerMoved", this.OnPlayerMoved(this.game.currentCharacter.currentPosition));
-    };
     BattleController.prototype.IsMoveValid = function (player, move) {
         if (player.character == this.game.currentCharacter &&
             this.game.IsAvailableFrom(move, this.game.currentCharacter.currentPosition)) {
@@ -64,6 +63,9 @@ var BattleController = /** @class */ (function () {
         for (var index = 0; index < this.game.characters.length; index++) {
             this.game.KillExplorer(this.game.characters[index]);
         }
+    };
+    BattleController.prototype.Destroy = function () {
+        this.server.Unsubscrube("PlayerMoved", this.OnPlayerMoved(this.game.currentCharacter.currentPosition));
     };
     return BattleController;
 }());

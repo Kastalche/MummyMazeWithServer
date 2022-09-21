@@ -22,10 +22,11 @@ var GameServer = /** @class */ (function () {
         this.gamedate = gamedata;
     }
     GameServer.prototype.Transition = function (newState) {
-        this.state.Destroy();
+        var _a;
+        (_a = this.state) === null || _a === void 0 ? void 0 : _a.Destroy();
         switch (newState) {
             case GameStates.StartState:
-                this.state = new StartContoller_1.StartController(this);
+                this.state = new StartContoller_1.StartController(this, this.gamedate);
                 break;
             case GameStates.BattleState:
                 this.state = new BattleContoller_1.BattleController(this);
@@ -33,27 +34,18 @@ var GameServer = /** @class */ (function () {
             case GameStates.EndState:
                 this.state = new EndController_1.EndController(this);
                 break;
-            default:
-                break;
         }
         this.state.Start();
     };
     GameServer.prototype.Start = function () {
         this.Transition(GameStates.StartState);
-    };
-    GameServer.prototype.End = function () {
-        this.socketCommunication.broadcast("endGame", {
-            winner: this.gamedate.characters[0],
-        });
+        this.BroadcastMessage("StartState");
     };
     GameServer.prototype.BroadcastMessage = function (message, data) {
         this.socketCommunication.broadcast(message, data);
     };
     GameServer.prototype.SendMessage = function (socket, message, data) {
-        this.socketCommunication.sendDataToClient(socket, message, data);
-    };
-    GameServer.prototype.SendToClient = function (message) {
-        this.socketCommunication.sendToClient(this.socketCommunication, message);
+        this.socketCommunication.sendMessage(socket, message, data);
     };
     GameServer.prototype.Subscribe = function (eventName, event) {
         this.socketCommunication.Subscribe(null, "add", this.state.Start, this.state);

@@ -4,7 +4,7 @@ exports.Player = void 0;
 var Player = /** @class */ (function () {
     function Player(socket, id) {
         this.socket = socket;
-        this.id = id;
+        this.id = socket.id;
     }
     return Player;
 }());

@@ -19,18 +19,18 @@ var Game = /** @class */ (function () {
         var _this = this;
         switch (this.curentMode) {
             case GameServer_1.GameModes.SinglePlayer:
-                var lcharacter = new Character_1.Character(this.gridManager.tiles[1][2], false, false);
-                this.players[0].character = lcharacter;
-                this.characters.push(lcharacter);
+                var plCharacter = new Character_1.Character(this.gridManager.tiles[1][2], false, false);
+                this.players[0].character = plCharacter;
+                this.characters.push(plCharacter);
                 this.characters.push(new Character_1.Character(this.gridManager.tiles[3][5], true, true) //mummy
                 );
                 break;
             case GameServer_1.GameModes.Multiplayer:
                 var isThereAMummyPlayer = false;
                 this.players.forEach(function (player) {
-                    var lcharacter = _this.CreateCharacterForPlayer(player);
-                    player.character = lcharacter;
-                    _this.characters.push(lcharacter);
+                    var plCharacter = _this.CreateCharacterForPlayer(player);
+                    player.character = plCharacter;
+                    _this.characters.push(plCharacter);
                 });
                 this.players.forEach(function (player) {
                     if (player.isMummy == true) {
@@ -125,6 +125,11 @@ var Game = /** @class */ (function () {
                 return this.players[index];
         }
     };
+    Game.prototype.FindAPlayerByCharacter = function (character) {
+        for (var index = 0; index < this.players.length; index++)
+            if (this.players[index].character == character)
+                return this.players[index];
+    };
     Game.prototype.FindMummyPosition = function () {
         for (var index = 0; index < this.characters.length; index++) {
             if (this.characters[index].isMummy == true)
@@ -136,19 +141,22 @@ var Game = /** @class */ (function () {
             var index = this.characters.indexOf(explorer);
             if (index > -1) {
                 this.characters.splice(index, 1);
+                var deadPlayer = this.FindAPlayerByCharacter(explorer);
+                this.server.BroadcastMessage("deadPlayer", deadPlayer);
             }
         }
     };
     Game.prototype.MummiesTurn = function () {
         var _this = this;
+        //TODO: implement currrent player, character logic
         this.characters.forEach(function (character) {
             if (character.isMummy == true) {
                 if (character.isBot == true) {
                     _this.botLogic.GenerateBotMove(character);
                 }
                 else {
-                    _this.server.SendToClient("RequestMove");
-                    _this.server.Subscribe;
+                    _this.server.SendMessage(_this, "RequestMove");
+                    //this.server.Subscribe("SendMove")
                 }
             }
         });

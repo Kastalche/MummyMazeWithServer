@@ -28,6 +28,8 @@ var SocketCommunication = /** @class */ (function () {
         this.io.on("connection", function (socket) {
             if (socket.connected) {
                 console.log("a user connected");
+                //this.broadcast("PlayerId", socket.id);
+                //this.socketList.push(socket);
                 //TODO: a user chosses character()
             }
             socket.on("singlePlayer", function () {
@@ -45,31 +47,24 @@ var SocketCommunication = /** @class */ (function () {
                     _this.GameServer.Start();
                 }
             });
-            // socket.on("startGame", () => {
-            //     console.log("The game is starting");
-            //     this.GameServer.Transition(GameStates.StartState);
-            // });
             socket.on("disconnect", function () {
                 console.log("disconnected");
-                _this.broadcast("otherPlayerDisconnected");
+                //this.broadcast("otherPlayerDisconnected");
             });
-            //socket.on("playerMove", (arg1) => {});
         });
     };
     SocketCommunication.prototype.broadcast = function (eventName, data) {
         this.io.sockets.emit(eventName, data);
     };
-    SocketCommunication.prototype.sendToClient = function (socket, eventName) {
-        socket.emit(eventName);
-    };
-    SocketCommunication.prototype.sendDataToClient = function (socket, eventName, data) {
+    SocketCommunication.prototype.sendMessage = function (socket, eventName, data) {
         socket.emit(eventName, data);
     };
     SocketCommunication.prototype.Subscribe = function (socket, eventName, callback, contex) {
-        socket.on(eventName, function () {
-            callback.call(contex);
+        socket.on(eventName, function (arg) {
+            callback.call(contex, arg);
         });
     };
+    //check if this subscribe is correct
     SocketCommunication.prototype.Unsubscribe = function (socket, eventName, callback, contex) {
         socket.of(eventName, function () {
             callback.call(contex);
